@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Hangman
 {
@@ -16,6 +18,21 @@ namespace Hangman
             }
 
             return length;
+        }
+
+
+        public List<string> GetAvailableLanguages(string path)
+        {
+            var words = Directory.GetFiles(path);
+            string lang;
+            List<string> languages = new List<string>();
+            foreach(var word in words)
+            {
+                lang = word.Substring(5);
+                lang = lang.Remove(lang.Length - 4);
+                languages.Add(lang);
+            }
+            return languages;
         }
 
         public int GetLetterAmount(int length)

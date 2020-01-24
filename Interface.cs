@@ -17,24 +17,53 @@ namespace Hangman
             int[] positions;
             List<char> TriedCharacters = new List<char>();
             List<string> AvailableWords = new List<string>();
+            List<string> Languages = new List<string>();
             string choice;
             string NewWord;
             string lang;
+            int ChosenNumber;
             char CharacterAsked;
             string CurrentGuess;
             bool state;
             bool IsGameOver = false;
+            ConsoleKeyInfo keypressed;
             Console.WriteLine("Welcome to the Hangman solver!" +
                 "\nIn this program, You will think of a word while the program tries to solve it as fast as possible." +
                 "\nGood luck..");
             Console.ReadKey(true);
+            Languages = provider.GetAvailableLanguages("Data");
             Console.Clear();
             do
             {
                 AvailableWords.Clear();
                 TriedCharacters.Clear();
-                Console.WriteLine("What language do you want the word to be in? Availbable options: (eng/swe)");
-                lang = Console.ReadLine();
+                ChosenNumber = 0;
+                lang = "";
+                do
+                {
+                    for (int i = 0; i < Languages.Count; i++)
+                    {
+                        if (i == ChosenNumber)
+                        {
+                            Console.WriteLine($"->{Languages[i]}");
+                            lang = Languages[i];
+                        }
+                        else
+                        {
+                            Console.WriteLine(Languages[i]);
+                        }
+                    }
+                    keypressed = Console.ReadKey(true);
+                    if (keypressed.Key == ConsoleKey.DownArrow)
+                    {
+                        if(ChosenNumber != Languages.Count-1) ChosenNumber++;
+                    }
+                    else if (keypressed.Key == ConsoleKey.UpArrow)
+                    {
+                        if (ChosenNumber != 0) ChosenNumber--;
+                    }
+                    Console.Clear();
+                } while (ConsoleKey.Enter != keypressed.Key);
                 length = provider.GetWordLength();
                 AvailableWords = guesser.RetrieveWords(length, lang);
                 CurrentGuess = string.Concat(Enumerable.Repeat("_", length));
