@@ -6,6 +6,7 @@ namespace Hangman
 {
     public class Provider
     {
+        private string path = "Data/";
         public int GetWordLength()
         {
             int length = 0;
@@ -21,7 +22,7 @@ namespace Hangman
         }
 
 
-        public List<string> GetAvailableLanguages(string path)
+        public List<string> GetAvailableLanguages()
         {
             var words = Directory.GetFiles(path);
             string lang;

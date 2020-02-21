@@ -8,7 +8,7 @@ namespace Hangman
             {
                 return true;
             }
-            else if (tries >= 10 || AvailableWords == 0)
+            else if (tries >= 5 || AvailableWords == 0)
             {
                 return true;
             }

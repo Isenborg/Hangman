@@ -45,7 +45,7 @@ namespace Hangman
                             x = 1;
                             foreach (var letter in word)
                             {
-                                if (x == positions[i])
+                                if (positions[0] == x)
                                 {
                                     if (letter.Equals(character))
                                     {
@@ -96,7 +96,7 @@ namespace Hangman
             SortedDictionary<Char, ulong> CharacterCount = new SortedDictionary<char, ulong>();
             foreach(var word in words)
             {
-                foreach(var character in word)
+                foreach(var character in word.ToUpper())
                 {
                     if (!CharacterCount.ContainsKey(character))
                     {

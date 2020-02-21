@@ -27,20 +27,20 @@ namespace Hangman
             bool state;
             bool IsGameOver = false;
             ConsoleKeyInfo keypressed;
-            Console.WriteLine("Welcome to the Hangman solver!" +
-                "\nIn this program, You will think of a word while the program tries to solve it as fast as possible." +
-                "\nGood luck..");
+            DisplayTitle();
             Console.ReadKey(true);
-            Languages = provider.GetAvailableLanguages("Data");
+            Languages = provider.GetAvailableLanguages();
             Console.Clear();
             do
             {
                 AvailableWords.Clear();
                 TriedCharacters.Clear();
                 ChosenNumber = 0;
-                lang = "";
+                lang  = "";
                 do
                 {
+                    DisplayTitle();
+                    Console.WriteLine("Choose the language of your word:");
                     for (int i = 0; i < Languages.Count; i++)
                     {
                         if (i == ChosenNumber)
@@ -64,18 +64,21 @@ namespace Hangman
                     }
                     Console.Clear();
                 } while (ConsoleKey.Enter != keypressed.Key);
+                DisplayTitle();
                 length = provider.GetWordLength();
                 AvailableWords = guesser.RetrieveWords(length, lang);
                 CurrentGuess = string.Concat(Enumerable.Repeat("_", length));
                 IsGameOver = false;
                 fails = 0;
-                
+                Console.Clear();
                 do
                 {
+                    DisplayTitle();
+                    Console.WriteLine($"Amount of words left: {AvailableWords.Count}");
                     Console.WriteLine($"Current guess: {CurrentGuess}");
                     CharacterAsked = guesser.GetAvaiableCharacter(TriedCharacters, AvailableWords);
                     TriedCharacters.Add(CharacterAsked);
-                    Console.WriteLine($"Amount of failures left: {10-fails} / 10");
+                    Console.WriteLine($"Amount of failures left: {5-fails} / 5");
                     Console.Write($"Is the letter \"{CharacterAsked}\" in your word? " +
                         $"\n(Y/N): ");
                     choice = Console.ReadLine();
@@ -102,8 +105,9 @@ namespace Hangman
                         fails++;
                         IsGameOver = game.IsGameOver(AvailableWords.Count, fails);
                     }
+                    Console.Clear();
                 } while (IsGameOver == false);
-                if (fails >= 10 || AvailableWords.Count == 0)
+                if (fails >= 5 || AvailableWords.Count == 0)
                 {
                     Console.Write("You WON! The computer could not guess your word." +
                         "\nWhat was your word? ");
@@ -136,6 +140,25 @@ namespace Hangman
                 }
                 Console.Clear();
             } while (choice == "Y" || choice == "y");
+        }
+
+        private static void DisplayTitle()
+        {
+            var arr = new string[]
+            {
+                    @" _                                             ",
+                    @"| |                                            ",
+                    @"| |__   __ _ _ __   __ _ _ __ ___   __ _ _ __  ",
+                    @"| '_ \ / _` | '_ \ / _` | '_ ` _ \ / _` | '_ \ ",
+                    @"| | | | (_| | | | | (_| | | | | | | (_| | | | |",
+                    @"|_| |_|\__,_|_| |_|\__, |_| |_| |_|\__,_|_| |_|",
+                    @"                    __/ |                      ",
+                    @"___________________|___/_______________________",
+            };
+            foreach (var line in arr)
+            {
+                Console.WriteLine(line);
+            }
         }
     }
 }

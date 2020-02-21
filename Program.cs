@@ -6,6 +6,7 @@ namespace Hangman
     {
         static void Main(string[] args)
         {
+            Console.Clear();
             var Interface = new Interface();
             Interface.run();
         }
