@@ -32,64 +32,39 @@ namespace Hangman
 
         public List<string> FilterWords(char character, List<string> words, bool state, int[] positions = null)
         {
-            int x = 1;
-            List<string> FilteredWords = new List<string>();
-            if (state == true)
-            {
-                for (int i = 0; i < positions.Length; i++)
-                {
-                    if (i == 0)
-                    {
-                        foreach (var word in words)
-                        {
-                            x = 1;
-                            foreach (var letter in word)
-                            {
-                                if (positions[0] == x)
-                                {
-                                    if (letter.Equals(character))
-                                    {
-                                        FilteredWords.Add(word);
-                                    }
-                                }
-                                x++;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        List<string> TemporaryList = new List<string>();
-                        foreach (var word in FilteredWords)
-                        {
-                            x = 1;
-                            foreach (var letter in word)
-                            {
-                                if (x == positions[i])
-                                {
-                                    if (letter.Equals(character))
-                                    {
-                                        TemporaryList.Add(word);
-                                    }
-                                }
-                                x++;
-                            }
-                        }
-                        FilteredWords = TemporaryList;
-                    }
-                }
-            }
-            else
-            {
-                foreach (var word in words)
-                {
-                    if (!word.Contains(character))
-                    {
-                        FilteredWords.Add(word);
-                    }
-                }
-            }
-            return FilteredWords;
+            return state
+                ? GetWordsThatContainCharAtPositions(words, character, positions).ToList()
+                : GetWordsThatDontContainChar(words, character).ToList();
         }
+
+        private static IEnumerable<string> GetWordsThatContainCharAtPositions(IEnumerable<string> words, char character, IEnumerable<int> positions)
+        {
+            return words.Where(word => {
+                return StringHasCharsAt(word, positions)
+                && StringContainsCharacterAtPositions(word, character, positions) 
+                && StringContainsSameAmountOfCharacters(word, character, positions.Count());
+            });
+        }
+
+        private static bool StringHasCharsAt(string text, IEnumerable<int> positions)
+            => text.Length >= positions.Max();
+
+        private static bool StringContainsCharacterAtPositions(string word, char character, IEnumerable<int> positions)
+            => positions.All(pos => word[pos - 1].Equals(character));
+
+        private static IEnumerable<string> GetWordsThatDontContainChar(List<string> words, char character)
+            => words.Where(w => !w.Contains(character));
+
+        private static bool StringContainsSameAmountOfCharacters(string word, char character, int AmountOfSpecificCharacter)
+        {
+            int Amount = 0;
+            foreach(var c in word)
+            {
+                if(c == character) Amount++;
+            }
+            return Amount == AmountOfSpecificCharacter;
+        }
+
 
         public char GetAvaiableCharacter(List<char> TriedCharacters, List<string> words)
         {

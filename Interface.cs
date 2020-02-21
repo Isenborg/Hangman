@@ -24,7 +24,7 @@ namespace Hangman
             int ChosenNumber;
             char CharacterAsked;
             string CurrentGuess;
-            bool state;
+            bool WordContainsLetter;
             bool IsGameOver = false;
             ConsoleKeyInfo keypressed;
             DisplayTitle();
@@ -89,19 +89,19 @@ namespace Hangman
                     }
                     if (choice == "Y" || choice == "y")
                     {
-                        state = true;
+                        WordContainsLetter = true;
                         Console.Write($"\nHow many times does the letter \"{CharacterAsked}\" occur in your word? " +
                             $"\nEnter how many occurances: ");
                         occurances = provider.GetLetterAmount(length);
                         positions = provider.GetWordPosition(length, occurances);
                         CurrentGuess = provider.UpdateWord(CurrentGuess, positions, occurances, CharacterAsked);
-                        AvailableWords = guesser.FilterWords(CharacterAsked, AvailableWords, state, positions);
+                        AvailableWords = guesser.FilterWords(CharacterAsked, AvailableWords, WordContainsLetter, positions);
                         IsGameOver = game.IsGameOver(AvailableWords.Count, fails);
                     }
                     else
                     {
-                        state = false;
-                        AvailableWords = guesser.FilterWords(CharacterAsked, AvailableWords, state);
+                        WordContainsLetter = false;
+                        AvailableWords = guesser.FilterWords(CharacterAsked, AvailableWords, WordContainsLetter);
                         fails++;
                         IsGameOver = game.IsGameOver(AvailableWords.Count, fails);
                     }
