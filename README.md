@@ -1,12 +1,12 @@
 # Tests
 
 ```csharp
-            int Amount = 0;
-            foreach(var c in word)
-            {
-                if(c == character) Amount++;
-            }
-            return Amount == AmountOfSpecificCharacter;
+int Amount = 0;
+foreach(var c in word)
+{
+   if(c == character) Amount++;
+}
+return Amount == AmountOfSpecificCharacter;
 ```
 
 
