@@ -6,21 +6,27 @@ namespace Hangman
 {
     public class Provider
     {
-        private string path = "Data/";
-        public int GetWordLength()
+        private readonly string path = "Dictionaries/";
+
+        public List<string> ReadList(int length, string language)
         {
-            int length = 0;
-            Console.Write("Think of a word between 4-15 characters long" +
-                "\nHow many characters does your word have?" +
-                "\nEnter here: ");
-            while (!int.TryParse(Console.ReadLine(), out length) || (length > 15 || length < 4))
+            if (!File.Exists(path + language + ".txt"))
             {
-                Console.Write("Enter a valid numer instead: ");
+                Console.WriteLine("Word file has not been found.");
+                return null;
             }
 
-            return length;
+            var RetrievedWords = new List<string>();
+            string[] words = File.ReadAllLines(path + language + ".txt");
+            foreach (var word in words)
+            {
+                if (word.Length == length)
+                {
+                    RetrievedWords.Add(word.ToUpper());
+                }
+            }
+            return RetrievedWords;
         }
-
 
         public List<string> GetAvailableLanguages()
         {
@@ -29,49 +35,16 @@ namespace Hangman
             List<string> languages = new List<string>();
             foreach(var word in words)
             {
-                lang = word.Substring(5);
+                lang = word.Substring(13);
                 lang = lang.Remove(lang.Length - 4);
                 languages.Add(lang);
             }
             return languages;
         }
 
-        public int GetLetterAmount(int length)
+        public void AddNewWord(string NewWord, string lang)
         {
-            int position;
-            while (!int.TryParse(Console.ReadLine(), out position) || (length < position || position <= 0))
-            {
-                Console.Write("Enter a valid numer instead: ");
-            }
-            return position;
+            File.AppendAllText(path + lang + ".txt", "\n" + NewWord);
         }
-
-        public int[] GetWordPosition(int length, int times)
-        {
-            int position;
-            int[] positions = new int[times];
-            for (int i = 0; i < times; i++)
-            {
-                Console.Write($"Enter position number {i+1}: ");
-                while (!int.TryParse(Console.ReadLine(), out position) || (length < position || position <= 0))
-                {
-                    Console.Write("Enter a valid numer instead: ");
-                }
-                positions[i] = position;
-                position = 0;
-            }
-            return positions;
-        }
-
-        public string UpdateWord(string word, int[] positions, int times, char character)
-        {
-            for(int i = 0; i < times; i++)
-            {
-                word = word.Insert(positions[i], character.ToString());
-                word = word.Remove(positions[i]-1, 1);
-            }
-            return word;
-        }
-
     }
 }

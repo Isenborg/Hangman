@@ -2,13 +2,12 @@
 
 namespace Hangman
 {
-    class Program
+    public static class Program
     {
         static void Main(string[] args)
         {
-            Console.Clear();
-            var Interface = new Interface();
-            Interface.run();
+            Console.Title = "Hangman Guesser";
+            HangmanSolverInterface.run();
         }
     }
 }

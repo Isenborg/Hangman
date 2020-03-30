@@ -1,8 +1,8 @@
 namespace Hangman
 {
-    class Game
+    public static class Game
     {
-        public bool IsGameOver(int AvailableWords, int tries)
+        public static bool IsOver(int AvailableWords, int tries)
         {
             if (AvailableWords == 1)
             {
